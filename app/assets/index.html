@@ -1,0 +1,459 @@
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html class="ui-mobile-rendering" lang="en">
+    <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>
+            Lizard Mobile
+        </title>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" href="styles/app.css" type="text/css">
+        <script src="scripts/app.js" type="text/javascript">
+        </script>
+        <script type="text/javascript">
+        require('initialize');
+
+        $( '#basemaps' ).live( 'pageinit',function(event){
+            var demo;
+            demo = {};
+            demo.resizeContentArea = function() {
+              var content, contentHeight, footer, header, viewportHeight;
+              window.scroll(0, 0);
+              header = $(":jqmData(role='header'):visible");
+              footer = $(":jqmData(role='footer'):visible");
+              content = $(":jqmData(role='content'):visible");
+              viewportHeight = $(window).height();
+              contentHeight = viewportHeight - header.outerHeight() - footer.outerHeight();
+              $("article:jqmData(role='content')").first().height(contentHeight);
+              return $("#map").height(contentHeight + 75);
+            };
+            window.demo = demo;
+            $(window).bind('orientationchange pageshow resize', window.demo.resizeContentArea);
+
+
+            var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png';
+            var cloudmadeAttribution = 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade';
+            var cloudmade = new L.TileLayer(cloudmadeUrl, {maxZoom: 18, attribution: cloudmadeAttribution});
+
+            var ahn25m = new L.TileLayer.WMS("http://geodata.nationaalgeoregister.nl/ahn25m/wms", {
+                layers: 'ahn25m',
+                format: 'image/png',
+                transparent: true,
+                attribution: "Nationaal Georegister &copy; 2012",
+                opacity: .5                
+            });
+            window.ahn25m = ahn25m;
+            
+            var ahnbladindex = new L.TileLayer.WMS("http://geoserver.lizard.net/geoserver/floodapp/wms", {
+                layers: 'bladindex',
+                format: 'image/png',
+                transparent: true,
+                attribution: "Nelen &amp; Schuurmans &copy; 2012"
+            });
+            window.ahnbladindex = ahnbladindex;
+            
+            var ahnvlieglijnen = new L.TileLayer.WMS("http://geoserver.lizard.net/geoserver/floodapp/wms", {
+                layers: 'vlieglijnen',
+                format: 'image/png',
+                transparent: true,
+                attribution: "Nelen &amp; Schuurmans &copy; 2012"
+            });
+            window.ahnvlieglijnen = ahnvlieglijnen;
+            
+            var natura2000 = new L.TileLayer.WMS("http://geodata.nationaalgeoregister.nl/natura2000/wms", {
+                layers: 'natura2000',
+                format: 'image/png',
+                transparent: true,
+                attribution: "Nationaal Georegister &copy; 2012",
+                opacity: .5
+            });
+            window.natura2000 = natura2000;
+            
+            var bestgrenz = new L.TileLayer.WMS("http://geoserver.lizard.net/geoserver/pdok/wms", {
+                layers: 'bestuurlijkegrenzen:buurten',
+                format: 'image/png',
+                transparent: true,
+                attribution: "Nelen &amp; Schuurmans &copy; 2012"
+            });
+            window.bestgrenz = bestgrenz;
+            
+            var gemeenten = new L.TileLayer.WMS("http://geoserver.lizard.net/geoserver/pdok/wms", {
+                layers: 'gemeenten',
+                format: 'image/png',
+                transparent: true,
+                attribution: "Nelen &amp; Schuurmans &copy; 2012"
+            });
+            window.gemeenten = gemeenten;
+            
+            var baseMaps = {
+                "Basiskaart": cloudmade
+            };
+
+            var overlayMaps = {
+                "AHN25m": ahn25m,
+                "AHN Natura 2000": natura2000,
+                "Best. grenzen": bestgrenz,
+                "Gemeenten": gemeenten
+            };
+            layersControl = new L.Control.Layers(baseMaps, overlayMaps);
+            
+            var map = new L.Map('map', {
+                layers: [cloudmade]
+            });
+        	map.addControl(layersControl);
+
+            map.on('locationerror', function(e) {
+              alert(e.message);
+              return map.fitWorld();
+            });
+            
+            // L.DomUtil.setOpacity($('ahn25m'), 0.5);
+            
+            return map.locateAndSetView(16);
+
+        });
+        
+        $( '#rainapp' ).live( 'pageinit', function(event) {
+            
+            
+            var demo;
+            demo = {};
+            demo.resizeContentArea = function() {
+              var content, contentHeight, footer, header, viewportHeight;
+              window.scroll(0, 0);
+              header = $(":jqmData(role='header'):visible");
+              footer = $(":jqmData(role='footer'):visible");
+              content = $(":jqmData(role='content'):visible");
+              viewportHeight = $(window).height();
+              contentHeight = viewportHeight - header.outerHeight() - footer.outerHeight();
+              $("article:jqmData(role='content')").first().height(contentHeight);
+              return $("#rainmap").height(contentHeight + 75);
+            };
+            window.demo = demo;
+            $(window).bind('orientationchange pageshow resize', window.demo.resizeContentArea);
+            
+            var cloudmadeUrl = 'http://{s}.tiles.mapbox.com/v3/mapbox.world-light/{z}/{x}/{y}.png';
+            var cloudmadeAttribution = 'Map data &copy; and Imagery &copy; 2011 MapBox';
+            var cloudmade = new L.TileLayer(cloudmadeUrl, {maxZoom: 18, attribution: cloudmadeAttribution});
+
+            var worlddarkUrl = 'http://{s}.tiles.mapbox.com/v3/mapbox.world-dark/{z}/{x}/{y}.png';
+            var worlddarkAttribution = 'Map data &copy; and Imagery &copy; 2011 MapBox';
+            var worlddark = new L.TileLayer(worlddarkUrl, {maxZoom: 18, attribution: worlddarkAttribution});
+
+
+            // time=2012-02-22T15:55:00Z
+            var d = new Date();
+            var curr_date = d.getDate();
+            var curr_month = d.getMonth();
+            var curr_year = d.getFullYear();
+            var curr_hour = d.getHours();
+            curr_hour = curr_hour - 2;
+            var curr_minute = 55;//d.getMinutes();
+            var rainapp_datetime = curr_year + 
+                "-" + ((curr_month < 10 ? '0' : '') + curr_month) + 
+                "-" + ((curr_date < 10 ? '0' : '') + curr_date) + 
+                "T" + 
+                ((curr_hour < 10 ? '0' : '') + curr_hour) + 
+                ":" + 
+                ((curr_minute < 10 ? '0' : '') + curr_minute) + ":00Z";
+
+            console.log(rainapp_datetime);
+            var rainapp_wms = new L.TileLayer.WMS("http://geoservices.knmi.nl/cgi-bin/RADNL_OPER_R___25PCPRR_L3.cgi", {
+                layers: 'RADNL_OPER_R___25PCPRR_L3_KNMI',
+                format: 'image/png',
+                srs: 'EPSG:4326',
+                bbox: '1.30120481927713,48.32852373348819,10.843373493975891,57.50280156771664&',
+                styles: 'default',
+                transparent: true,
+                time: rainapp_datetime,
+                attribution: "KNMI &copy; 2012"
+            });
+            window.rainapp_wms = rainapp_wms;
+ 
+            
+            var baseMaps = {
+                "Basiskaart": cloudmade,
+                "Donker": worlddark
+            };
+
+            var overlayMaps = {
+                "Rainapp": rainapp_wms,
+            };
+            layersControl = new L.Control.Layers(baseMaps, overlayMaps);
+            
+            var rainmap = new L.Map('rainmap', {
+                layers: [cloudmade, rainapp_wms]
+            });
+        	rainmap.addControl(layersControl);
+
+            rainmap.on('locationerror', function(e) {
+              alert(e.message);
+              return rainmap.fitWorld();
+            });
+            
+            return rainmap.locateAndSetView(8);
+        });
+        
+        
+        $('#metingen').live('pageinit', function(event) {
+            var init;
+            
+            window.draw = function(data_src) {
+              return d3.json(data_src, function(data) {
+                var barWidth, height, title, width, x, y;
+                barWidth = 20;
+                width = (barWidth + 10) * data.precipitation.length;
+                height = 200;
+                x = d3.scale.linear().domain([0, data.precipitation.length]).range([0, width]);
+                y = d3.scale.linear().domain([
+                  0, d3.max(data.precipitation, function(d) {
+                    return d.amount;
+                  })
+                ]).rangeRound([0, height]);
+                window.raingraph = d3.select("#graph").append("svg").attr("width", width).attr("height", height + 20);
+                title = raingraph.append("text").attr("class", "title").attr("dy", "1em").attr("transform", "translate(" + x(1) + "," + y(1) + ")").text(function(d) {
+                  return "Gemeente " + data.city;
+                });
+                raingraph.selectAll("rect").data(data.precipitation).enter().append("rect").attr("x", function(d, i) {
+                  return x(i);
+                }).attr("y", function(d) {
+                  return height - y(d.amount);
+                }).attr("height", function(d, i) {
+                  return y(d.amount);
+                }).attr("width", barWidth);
+                raingraph.selectAll("text").data(data.precipitation).enter().append("text").attr("x", function(d, i) {
+                  return x(i) + barWidth;
+                }).attr("y", function(d) {
+                  return height - y(d.amount);
+                }).attr("dx", -barWidth / 2).attr("dy", "1.2em").attr("style", "font-size: 8px;").attr("text-anchor", "middle").text(function(d) {
+                  return d.amount.toPrecision(2);
+                }).attr("fill", "white");
+                return raingraph.selectAll("text.yAxis").data(data.precipitation).enter().append("text").attr("x", function(d, i) {
+                  return x(i) + barWidth;
+                }).attr("y", height).attr("dx", -barWidth / 2).attr("text-anchor", "middle").attr("style", "font-size: 8px; font-family: Helvetica, sans-serif").text(function(d) {
+                  return d.date;
+                }).attr("transform", "translate(0, 18)").attr("class", "yAxis");
+              });
+            };
+            
+            init = function() {
+              window.draw("data/utrecht.json");
+              return true;
+            };
+            
+            init();
+        });
+        </script>
+        
+    </head>
+    <body>
+        <div data-role="page" id="home-page">
+            <div class="nav-glyphish-example app-nav" data-position="fixed">
+                <div data-role="navbar" class="nav-glyphish-example" data-grid="d" data-theme="b">
+                    <ul>
+                        <li>
+                            <a href="#home-page" id="search-icon" data-icon="custom" name="search-icon">Home</a>
+                        </li>
+                        <li>
+                            <a href="#layers-page" id="source-icon" data-icon="custom" name="source-icon">Layers</a>
+                        </li>
+                        <li>
+                            <a href="#options-page" id="options-icon" data-icon="custom" name="options-icon">Options</a>
+                        </li>
+                        <li>
+                            <a href="#help-page" id="instructions-icon" data-icon="custom" name="instructions-icon">Help</a>
+                        </li>
+                        <li>
+                            <a href="#about-page" id="about-icon" data-icon="custom" name="about-icon">About</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div data-role="content">
+                <div id="home">
+                    <div id="logo">
+                        <img src="images/logo.png" alt="" />
+                    </div>
+
+                    <ul data-role="listview" class="ui-listview" style="margin-left:-100px;">
+                        <li data-theme="c" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-li-has-thumb ui-btn-up-c"><div class="ui-btn-inner ui-li"><div class="ui-btn-text"><a href="#basemaps" class="ui-link-inherit">
+                            <img src="images/kaartlagen.png" class="ui-li-thumb">
+                            <h3 class="ui-li-heading">Basiskaarten</h3>
+                            <p class="ui-li-desc">(Gebiedsgrenzen, Kunstwerken en Waterlopen)</p>
+                        </a></div><span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span></div></li>
+                        <li data-theme="c" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-li-has-thumb ui-btn-up-c"><div class="ui-btn-inner ui-li"><div class="ui-btn-text"><a href="#rainapp" class="ui-link-inherit">
+                            <img src="images/neerslag.png" class="ui-li-thumb">
+                            <h3 class="ui-li-heading">RainApp</h3>
+                            <p class="ui-li-desc">(Gedetailleerde neerslagdata per gemeente)</p>
+                        </a></div><span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span></div></li>
+                        <li data-theme="c" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-li-has-thumb ui-btn-up-c"><div class="ui-btn-inner ui-li"><div class="ui-btn-text"><a href="#metingen" class="ui-link-inherit">
+                            <img src="images/meetgegevens.png" class="ui-li-thumb">
+                            <h3 class="ui-li-heading">Metingen</h3>
+                            <p class="ui-li-desc">(Realtime metingen)</p>
+                        </a></div><span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span></div></li>
+                    </ul>                        
+
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        <div data-role="page" id="options-page">
+            <div data-role="header" data-position="inline">
+                <a href="#home-page" data-icon="arrow-l">Back</a>
+                <h1>
+                    Options
+                </h1>
+            </div>
+            <div data-role="content">
+                <h2>Choose baselayers</h2>
+                
+                <div class="ui-controlgroup-controls">
+					<div class="ui-checkbox">
+					    <input type="checkbox" name="checkbox-1a" id="checkbox-1a" class="custom">
+					    <label for="checkbox-1a" data-theme="c" class="ui-btn ui-btn-icon-left ui-checkbox-off ui-corner-top ui-btn-up-c">
+					            <span class="ui-btn-text">
+					                OpenStreetMap
+					            </span>
+					    </label>
+					    <input type="checkbox" name="checkbox-1b" id="checkbox-1b" class="custom">
+					    <label for="checkbox-1b" data-theme="c" class="ui-btn ui-btn-icon-left ui-checkbox-off ui-corner-top ui-btn-up-c">
+					            <span class="ui-btn-text">
+					                Google Maps
+					            </span>
+					    </label>
+					</div>    					
+					<div class="ui-checkbox">
+					    <input type="checkbox" name="checkbox-1c" id="checkbox-1c" class="custom">
+					    <label for="checkbox-1c" data-theme="c" class="ui-btn ui-btn-icon-left ui-checkbox-off ui-corner-top ui-btn-up-c">
+					            <span class="ui-btn-text">
+					                Cloudmade
+					            </span>
+					    </label>
+					</div>    					    					
+			    </div>
+            </div>
+        </div>
+        
+        <div data-role="page" id="help-page">
+            <div data-role="header" data-position="inline">
+                <a href="#home-page" data-icon="arrow-l">Back</a>
+                <h1>
+                    Help
+                </h1>
+            </div>
+            <div data-role="content">
+                <div id="help">
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div data-role="page" id="layers-page">
+            <div data-role="header" data-position="inline">
+                <a href="#home-page" data-icon="arrow-l">Back</a>
+                <h1>
+                    Layers
+                </h1>
+            </div>
+            <div data-role="content">
+                <div id="help">
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div data-role="page" id="about-page">
+            <div data-role="header" data-position="inline">
+                <a href="#home-page" data-icon="arrow-l">Back</a>
+                <h1>
+                    About
+                </h1>
+
+            </div>
+            <div data-role="content">
+                <div id="help">
+                    <p>
+                        Lizard Mobile is a(n attempt at a) mobile version of <a href="http://www.lizard.net">Lizard</a>.
+                    </p>
+                    <p>
+                        <strong>Important:</strong> This is a one-man experiment with open-source mobile technologies and not (yet/ever) an actual product of <a href="http://www.nelen-schuurmans.nl/">Nelen &amp; Schuurmans</a>.
+                    </p>
+                    <p>
+                        <strong>Important too:</strong> Since this is a development version and I'm debugging it, all scripts are uncompressed, resulting in a hefty >1MB js file. Please consider this and use a wifi connection to save yourself precious mobile data costs.</p>
+                    </p>
+                    <p>
+                        The front-end is built using <a href="http://documentcloud.github.com/backbone/">Backbone.js</a> for client-side seperation of concerns (MVC-like). 
+                    </p>
+                    <p>
+                        <a href="http://jquerymobile.com/">jQuery Mobile</a> is used for the UI.</li>
+                    </p>
+                    <p>
+                        The front-end communicates via a <a href="https://www.djangoproject.com/">Django</a>-driven REST-API. It speaks JSON and is backed by <a href="http://www.postgresql.org/">PostgreSQL</a> and <a href="http://postgis.refractions.net/">PostGIS</a>.
+                    </p>
+                    <p>
+                        HTML5 LocalStorage is used for storing preferences (such as layer settings) and tiles.
+                    </p>
+                    <p>
+                        <a href="http://polymaps.org/">Polymaps</a> and <a href="http://leaflet.cloudmade.com/">Leaflet</a> are used for maps.
+                    </p>
+                    <p>
+                        <a href="http://mbostock.github.com/d3/">D3.js</a> is used for data visualization.
+                    </p>
+                    <p>
+                        Shapefiles and such can be uploaded via <a href="https://www.dropbox.com/">DropBox</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div data-role="page" id="basemaps">
+            <div data-role="header" data-position="fixed">
+                <a href="#home-page" data-icon="arrow-l">Back</a>
+                <h1>
+                    Basiskaarten
+                </h1>
+            </div>
+            <div data-role="content" style="margin: 0; padding: 0">
+                <div id="map"></div>
+            </div>
+
+        </div>
+        
+        <div data-role="page" id="rainapp">
+            <div data-role="header" data-position="inline">
+                <a href="#home-page" data-icon="arrow-l">Back</a>
+                <h1>
+                    Rainapp
+                </h1>
+            </div>
+            
+            <div data-role="content" style="margin: 0; padding: 0">
+                <div id="rainmap"></div>
+            </div>
+            
+        </div>
+        
+        <div data-role="page" id="metingen">
+            <div data-role="header" data-position="inline">
+                <a href="#home-page" data-icon="arrow-l">Back</a>
+                <h1>
+                    Metingen
+                </h1>
+            </div>
+            <div data-role="content">
+                <div id="graph"></div>
+            </div>
+        </div>        
+    </body>
+</html>

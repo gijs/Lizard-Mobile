@@ -1,0 +1,45 @@
+{
+  "city": "Woerden",
+  "precipitation": [
+    {
+      "date": "22/01",
+      "amount": 4
+    },
+    {
+      "date": "23/01",
+      "amount": 3
+    },
+    {
+      "date": "24/01",
+      "amount": 2
+    },
+    {
+      "date": "25/01",
+      "amount": 2
+    },
+    {
+      "date": "26/01",
+      "amount": 1
+    },
+    {
+      "date": "27/01",
+      "amount": 3.2
+    },
+    {
+      "date": "28/01",
+      "amount": 5
+    },
+    {
+      "date": "29/01",
+      "amount": 7
+    },
+    {
+      "date": "30/01",
+      "amount": 10.5
+    },
+    {
+      "date": "31/01",
+      "amount": 3
+    }
+  ]
+}

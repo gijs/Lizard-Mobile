@@ -1,0 +1,14 @@
+<div data-role="page" id="help-page">        
+    <div data-role="navbar">
+    	<ul>
+    		<li><a href="/">Home</a></li>
+    		<li><a href="#help-page" class="ui-btn-active">Help</a></li>
+    	</ul>
+    </div><!-- /navbar -->
+    
+  <div data-role="content">
+    <div id="help">
+        <h1>Help</h1>
+    </div>
+  </div>
+</div>

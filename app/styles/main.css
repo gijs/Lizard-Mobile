@@ -1,0 +1,55 @@
+
+
+article, #map, #rainmap {
+width: 100%;
+height: 300px;
+margin: 0;
+padding: 0;
+}
+
+/*#map {
+    height: 400px;
+    width: auto;
+}*/
+#search-icon .ui-icon {
+	background: url(../images/icons/06-magnify.png) 50% 50% no-repeat;
+	background-size: 24px 22px;
+}
+
+#options-icon .ui-icon {
+	background: url(../images/icons/36-toolbox.png) 50% 50% no-repeat;
+	background-size: 24px 16px;
+}
+
+#instructions-icon .ui-icon {
+	background: url(../images/icons/179-notepad.png) 50% 50% no-repeat;
+	background-size: 12px 26px;
+}
+
+#source-icon .ui-icon {
+	background: url(../images/icons/157-wrench.png) 50% 50% no-repeat;
+	background-size: 22px 27px;
+}
+
+#about-icon .ui-icon {
+	background: url(../images/icons/111-user.png) 50% 50% no-repeat;
+	background-size: 20px 24px;
+}
+
+div#logo{
+    height: 85px;
+}
+
+rect {
+    fill: #47A3B9;
+}
+
+.yAxis{
+    fill: #000;
+    color: #000;
+}
+
+.title {
+    font-size: 1em;
+    
+}
